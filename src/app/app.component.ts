@@ -15,5 +15,7 @@ export class AppComponent {
   }
   ngOnInit(): void {
     console.log(this.gmHttp)
+    console.log(unsafeWindow)
+    console.log(window)
   }
 }
