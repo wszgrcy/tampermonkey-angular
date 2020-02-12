@@ -3,7 +3,8 @@ const {
 } = require('util')
 const {
   readFileSync,
-  writeFileSync
+  writeFileSync,
+  existsSync
 } = require('fs')
 const path = require('path');
 const jsonConfig = require('./angular.json');
@@ -22,12 +23,17 @@ try {
 }
 // console.log(jsonConfig)
 let dir = path.join(__dirname, root, outputPath)
-let jsList = ['runtime.js', 'polyfills.js', 'scripts.js', 'main.js']
+let jsList = ['runtime.js', 'polyfills.js', 'scripts.js','styles.js', 'main.js']
 let jsRawList = []
 jsList.forEach((val) => {
-  jsRawList.push(readFileSync(path.join(dir, val), {
+  if (!existsSync(path.join(dir, val))) {
+    return
+  }
+  let file = readFileSync(path.join(dir, val), {
     encoding: 'utf8'
-  }))
+  })
+  console.log('加入',path.join(dir, val))
+  jsRawList.push(file)
 })
 let merge = format(...jsRawList)
 writeFileSync(`element.js`, merge)
